@@ -1,0 +1,46 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build
+target/
+build/
+*.jar
+*.war
+*.zip
+*.tar.gz
+
+# Maven
+node_modules/
+.m2/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+/logs/
+
+# Application
+/out/
+*.class
+*.classpath
+*.project
+*.settings/
+*.springBeans
+*.factorypath
+
+# Database
+/data/
+*.db
+*.sqlite
+
+# Docker
+.dockerignore
+/docker/data/
