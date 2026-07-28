@@ -1,0 +1,120 @@
+# SERVER
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: ${SERVER_SERVLET_CONTEXT_PATH:/api}
+  compression:
+    enabled: true
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# SPRING
+spring:
+  application:
+    name: egwallet-backend
+  
+  # Profiles
+  profiles:
+    active: dev
+  
+  # Database Configuration
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/egwallet}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: ${DB_DRIVER_CLASS_NAME:org.postgresql.Driver}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 20000
+      auto-commit: true
+  
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        format_sql: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    show-sql: false
+    open-in-view: false
+  
+  # JPA Pagination
+  data:
+    web:
+      pageable:
+        default-page-size: 20
+        one-indexed-parameters: false
+  
+  # Jackson Configuration
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      indent-output: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:your-super-secret-key-min-256-bits-change-in-production}
+  expiration: ${JWT_EXPIRATION:86400000}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+  issuer: ${JWT_ISSUER:egwallet-backend}
+  header: Authorization
+  prefix: Bearer 
+
+# CORS Configuration
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:8100}
+  allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,PUT,DELETE,OPTIONS}
+  allowed-headers: "*"
+  exposed-headers: Authorization,Content-Type
+  allow-credentials: true
+  max-age: ${CORS_MAX_AGE:3600}
+
+# LOGGING Configuration
+logging:
+  level:
+    root: INFO
+    com.egwallet: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/egwallet.log
+    max-size: 10MB
+    max-history: 10
+
+# ACTUATOR Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# FLYWAY Configuration
+spring:
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+
+# Application Configuration
+app:
+  name: EGWallet Backend
+  version: 1.0.0
+  description: Personal Finance Management System API
+  environment: ${APP_ENV:dev}
+  debug: ${APP_DEBUG:true}
